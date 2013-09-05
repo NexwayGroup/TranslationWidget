@@ -3,19 +3,36 @@
  *
  * @author   Ariana Las <ariana.las@gmail.com>
  * @author   Mariusz Maroń <mmaron@nexway.com>
+ * @author   Damian Duda <dduda@nexway.com>
  *
  * version   0.1.4
  *
  */
 
-
 ;(function ( $, window, document, undefined ) {
 
     /** @constructor */
-    var pluginName = "formWidget",
+    var pluginName = "translationFields",
         defaults = {
             inputNamePrefix: "",
-            removeText: "Delete this translation?"
+            confirmBox: {
+                yesText: "Yes, delete",
+                noText: "No, go away!",
+                infoMessage: 'Are you sure ?',
+                hText: 'Confirm your request',
+                outerClick: false,
+                useKeys: true
+            },
+            languages: {
+                "select": "Select language",
+                "PL": "Polish",
+                "EN": "English",
+                "FR": "French",
+                "ES": "Spanish",
+                "DE": "German"
+            },
+            addAnimation: "",
+            addAnimationSpeed: 700
         };
 
     // The actual plugin constructor
@@ -24,7 +41,7 @@
         this.countWidgetInstances = countWidgetInstances;
         $thisElement = $(this.element);
 
-        this.options = $.extend( {}, defaults, options );
+        this.options = $.extend( true, {}, defaults, options );
         this._defaults = defaults;
         this._name = pluginName;
 
@@ -37,16 +54,21 @@
 
             this.generalStart();
             this.makeSelectLang();
-            this.new_click();
-            this.update_click();
-            this.lang_click();
-            this.remove_click();
-            this.update_click();
-            this.option_changed();
-            this.apply_click();
+            this.newClick();
+            this.updateClick();
+            this.langClick();
+            this.removeClick();
+            this.updateClick();
+            this.optionChanged();
+            this.applyClick();
+            this.markTranslatedOptions();
+            this.toggleTranslationInput();
 
         },
 
+        /**
+         *    Creates HTML structure, bind click event to hide
+         */
         generalStart: function() {
 
             var $wrapBox = $('<div />', {
@@ -54,39 +76,41 @@
             });
 
             this.setInputName();
+            this.customAddAnimation();
+            this.escKey();
             $thisElement.wrap($wrapBox);
             $thisElement.before('<span class="add-on open-translation"><i class="icon-reorder"></i><i class="icon-caret-up"></i></span>');
             $thisElement.after('<div class="translation-options"><div class="translation-content"><div class="current-language"><textarea class="m-wrap new-word" placeholder="Text to translate" rows="1"></textarea><textarea class="m-wrap translated" placeholder="Text to translate" rows="1"></textarea><a href="#" class="btn blue apply">Apply</a><a href="#" class="btn blue update">Update</a></div></div></div>');
             $thisElement.next().find('.apply').after('<span class="hide-border"></span>');
 
-            var langTabs = this.langTab();
+            var langTabs = this.langTab(),
+                $allFormTranslation = $('.form-translation');
 
-            langTabs.insertAfter($thisElement.next()); // podobno undefined!!
-
-
-            // $(this.element)$('').insertAfter($(this.element).next());
+            langTabs.insertAfter($thisElement.next()); 
 
             $('body').click(function() {
-                $('.form-translation .open-translation').removeClass('open');
-                $('.form-translation .chosen-language').removeClass('open');
-                $('.form-translation').removeClass('show');
+                $allFormTranslation.removeClass('show').find('.open-translation, .chosen-language').removeClass('open');
+
             });
             
-            $('.form-translation').click(function(e){
+            $allFormTranslation.click(function(e){
                 e.stopPropagation();
             });
         },
 
         /**
-         *  Set the unique input name. User can set default prefix name.
+         *    Set the unique input name. User can set default prefix name.
          */
         setInputName: function() {
-            var labelName = $thisElement.parents(".control-group").children("label").text();
-                labelName = labelName.replace(" ","_");
+            var labelName = $thisElement.parents(".control-group").children("label").text().replace(" ","_");
 
             $thisElement.attr("name",this.options.inputNamePrefix + labelName); 
         },
 
+        /**
+         *    Returns a language tab container element
+         *    @returns {jQuery object} langTab
+         */
         langTab: function() {
             var langTab = $("<div />", {
                 "class" : "language-tabs"
@@ -94,121 +118,154 @@
             return langTab;
         },
 
-        new_click: function() {
+        /**
+         *    Bind click event to "new translation" button. It show/hide elements.
+         */
+        newClick: function() {
 
+            var self = this;
             $thisElement.prev().on('click', function () {
                 
-                $this = $(this);
+                var $this        = $(this),
+                    $current_div = $this.parent();
 
-                var $current_div = $this.parent();
                 $current_div.find('.chosen-language').removeClass('open');
                 $this.toggleClass('open');
+
                 if ($this.hasClass('open')) {
+                    self.toggleTranslationInput();
 
                     $current_div.find('.update').css('display', 'none');
                     $current_div.find('.apply').css('display', 'inline-block');
                     $current_div.find('.select-language').children('option[selected="selected"]').attr('selected', false);
                     $current_div.find('.select-language').children('option[value="select"]').attr('selected', true);
-                    //
                     $current_div.find('.current-language .new-word').val('').attr('placeholder', 'Text to translate').css('display', 'inline-block').focus().blur();
-
                     $current_div.find('.current-language .translated').css('display', 'none');
+
                     $('.form-translation').each(function() {
-                    if ($(this).hasClass('show')) {
+                    if ($(this).hasClass('show') ){
                         $(this).removeClass('show');
-                        return;
                     }
                     });
                         $current_div.addClass('show');
                     } else {
                         $current_div.removeClass('show');
                     }
- 
+
+                    self.toggleTranslationInput();
             });
         },
 
-        update_click: function() {
+        /**
+         *    Bind click event to "update" button. It show/hide elements and updates the hidden input.
+         */
+        updateClick: function() {
 
-            var $self = this;
+            var self = this;
 
-            $(this.element).parent().find('.update').unbind('click').on('click', function() {
+            $thisElement.parent().find('.update').unbind('click').on('click', function(e) { 
 
-                $current_div = $(this).parent().parent().parent().parent();
-                console.log($current_div);
+                e.preventDefault();
+                $current_div = $(this).parents(".form-translation");
                 $selected = $current_div.find('.select-language option[selected="selected"]').attr('value');
 
-                $input = $(this).siblings('.translated').val();
+                inputValue = $(this).siblings('.translated').val();
 
-                if (!$input == '') {
-
-                    $object = $($self.element).parent().find('.language-tabs > span[id="' + $selected + '"]');
-                    $object.children('input').attr('value', $input);
+                if (inputValue.length > 0) {
+                    $object = $(self.element).parent().find('.language-tabs > span[id="' + $selected + '"]');
+                    $object.children('input').attr('value', inputValue);
                     $object.css({backgroundColor: "#ffb848"});
                     $object.animate({backgroundColor: "#eee"}, 700);
                     $current_div.removeClass('show');
-
-                }
-
-                return false; //link deactivated
-                
+                    $current_div.find(".chosen-language").removeClass("open");
+                }                
             });
         },
 
-        apply_click: function() {
-            //input name!!!
+        /**
+         *    Bind click event to "apply" button. It creates new "translation badge".
+         */
+        applyClick: function() {
 
-            $self = this;
-            var applyBtn = $($self.element).next().find('.apply');
+            var $applyBtn = $(this.element).next().find('.apply'),
+                self = this;
 
-            applyBtn.on('click', function(e) {
+            $applyBtn.on('click', function(e) {
 
                 e.preventDefault();
 
-                    //input name!!!
-                    $main = $(this).parent().parent().parent().siblings('input');
-                    $name = $main.attr('name');
-                    $current_div = $main.parent();
-                    $selected = $current_div.find('.select-language option:selected').attr('value');
-                    $translation = $current_div.find('.new-word').val();
-                    if ($selected != "select" && $translation != "") {
-                        $str = '<span id="' + $selected + '" class="chosen-language">' + $selected;
-                        $str += '<a href="/" class="remove icon-remove"></a>';
-                        $str += '<input class="m-wrap" type="hidden" name="' + $name + '[' + $selected + ']" value="' + $translation + '"/>';
-                        $str += '</span>';
-                        $object = $($str).appendTo($current_div.find('.language-tabs'));
+                $main = $(this).parents('.translation-options').siblings('input');
+                name = $main.attr('name');
+                $current_div = $main.parent();
+                $selected = $current_div.find('.select-language option:selected').attr('value');
+                translation = $current_div.find('.new-word').val();
+
+                if ($selected != "select" && translation != "") {
+                    translationBadgeBody = '<span id="' + $selected + '" class="chosen-language">' + $selected;
+                    translationBadgeBody += '<a href="/" class="remove icon-remove"></a>';
+                    translationBadgeBody += '<input class="m-wrap" type="hidden" name="' + name + '[' + $selected + ']" value="' + translation + '"/>';
+                    translationBadgeBody += '</span>';
+                    $object = $(translationBadgeBody).appendTo($current_div.find('.language-tabs'));
+
+                    if($.isFunction($object.customAnimation)){
+                        $object.customAnimation();
+                    } 
+                    else {
                         $object.css({backgroundColor: "#ffb848"});
-                        $object.animate({backgroundColor: "#eee"}, 700);
-
-                        $object.mouseover(function(){
-                        $(this).css({backgroundColor: "#e1e1e1"});
-                        });
-
-                        $object.mouseleave(function(){
-                            $(this).css({backgroundColor: "#eee"});
-                        }); 
-
-                        $current_div.find('.apply').css('display', 'none');
-                        $current_div.find('.update').css('display', 'inline-block');
+                        $object.animate({backgroundColor: "#eee"}, self.options.addAnimationSpeed);
                     }
 
+                    $object
+                    .mouseover(function(){
+                        $(this).css({backgroundColor: "#e1e1e1"});
+                    })
+                    .mouseleave(function(){
+                        $(this).css({backgroundColor: "#eee"});
+                    }); 
+
+                    self.markTranslatedOptions();
+
+					$current_div.find('.current-language .new-word').css('display', 'none');
+					$current_div.find('.current-language .translated').css('display', 'inline-block');
+					$current_div.find('.current-language .translated').html(translation).val(translation);
+                    $current_div.find('.apply').css('display', 'none');
+                    $current_div.find('.update').css('display', 'inline-block');
                     $current_div.children('.open-translation').removeClass('open');
                     $object.toggleClass('open');
-                    
-                    return false; //link deactivated
+                }
             });
             
         },
+        /**
+         *    If custom animation exists then use it.
+         */
+        customAddAnimation: function() {
+            var animName = this.options.addAnimation,
+                animSpeed = this.options.addAnimationSpeed,
+                animationNames = ["slideToggle","fadeToggle"];
 
-        lang_click: function() {
+            if($.isFunction(this.options.addAnimation)){
+                $.fn["customAnimation"] = this.options.addAnimation;
+            } 
+            else if($.inArray(this.options.addAnimation , animationNames) != -1){
+                $.fn["customAnimation"] = function() { this[animName](0); return this[animName](animSpeed)};
+            }
+         },
 
-            var $self = this;
+        /**
+         *    Shows translation body for existing language badge.
+         */
+        langClick: function() {
 
-            var langTabBtn = $($self.element).next().next();
+            var $langTabBtn = $(this.element).nextAll(".language-tabs");
 
             $(function () {
-                langTabBtn.unbind('click').on('click', '.chosen-language', function() {
+                $langTabBtn.unbind('click').on('click', '.chosen-language', function() {
 
-                    $current_div = $(this).parent().parent();
+                    $this = $(this);
+                    if($this.hasClass("removed")) return;
+
+                    $current_div = $this.parent().parent();
                     $current_div.children('.open-translation').removeClass('open');
                     $(this).siblings().removeClass('open');
                     $(this).toggleClass('open');
@@ -239,7 +296,9 @@
             });
             
         },
-
+        /**
+         *    It creates the select and append it, which contains all avaiable languages.
+         */
         makeSelectLang: function() {
 
             var sTranslate = $('<select />', {
@@ -250,14 +309,8 @@
             var items = [];
 
             // Simple data for select
-            var data = {
-                "select": "Select language",
-                "PL": "Polish",
-                "EN": "English",
-                "FR": "French",
-                "ES": "Spanish",
-                "DE": "German"
-            }
+            var data = { "select": "Select language" };
+                data = $.extend(data, this.options.languages);
 
             $thisElement.next().children('.translation-content').prepend(sTranslate);
 
@@ -272,31 +325,123 @@
             $selectForm.append(items);
 
         },
-        remove_click: function() {
 
-            var $self = this;
+        createConfirmButtons: function() {
+
+            buttonYes = $('<a />', {
+                "class" : "button yes",
+                "id" : "removeYes",
+                "href" : "#"
+            }).text(this.options.confirmBox.yesText);
+
+            buttonNo = $('<a />', {
+                "class" : "button no",
+                "id" : "removeNo",
+                "href" : "#"
+            }).text(this.options.confirmBox.noText);
+
+            return buttonYes;
+            return buttonNo;
+        },
+
+        /**
+         *    Create content HTML for confirm box
+         */
+
+        createConfirmBoxContent: function() {
+            
+            containerConfirmOverlay = $('<div id="confirmOverlay"><div id="confirmBox"><h1>'+ this.options.confirmBox.hText +'</h1><p>'+ this.options.confirmBox.infoMessage +'</p><div id="confirmButtons"></div></div></div>');
+
+        },
+
+         /**
+         *    Removes the translation for clicked language.
+         */
+        removeClick: function() {
+
+            var self = this;
 
             $(function () {
-               $($self.element).next().next().on('click', '.remove', function(e) {
+
+               $removeIcon = $(self.element);
+               $removeIcon.next().next().on('click', '.remove', function(e) {
+
                     e.preventDefault();
-                    if (confirm($self.options.removeText)) {
-                        $main = $(this).parent().parent().siblings('input');
-                        $current_div = $main.parent();
+                    this.blur();
+                    itemToDelete = $(this).parent();
+
+                    if(itemToDelete.hasClass("removed")) return;
+                    
+                    self.createConfirmBoxContent();
+                    self.createConfirmButtons();
+
+                    $(containerConfirmOverlay).hide().appendTo('body').fadeIn();
+
+                    buttonYes.appendTo('#confirmButtons');
+                    buttonNo.appendTo('#confirmButtons');
+
+
+                    $main = $(this).parent().parent().siblings('input');
+                    $current_div = $main.parent();
+
+
+
+                    $('#confirmButtons').on('click', '#removeYes', function(e) {
+                        if(itemToDelete.hasClass("removed")) return;
+                        e.preventDefault();
+
+                        itemToDelete.addClass("removed").fadeOut(400, function() {
+                            itemToDelete.remove();
+                        });
+                        self.markTranslatedOptions();
                         $current_div.removeClass('show');
-                        $(this).parent().remove();
+                        $('#confirmOverlay').fadeOut().remove();
+                    });
+                    $('#confirmButtons').on('click', '#removeNo', function(e) {
+                        e.preventDefault();
+                        $('#confirmOverlay').fadeOut().remove();
+
+                    });
+                    
+                    if(self.options.confirmBox.outerClick == true) {
+                        $('#confirmBox').on('click', function(e) {
+                            e.stopPropagation();
+                            return false;
+                        });
+
+                        $('body').on('click', function(e) {
+                            $('#confirmOverlay').fadeOut().remove();
+                        });
                     }
 
-                    return false; //link deactivated
+
                 });
             });
             
         },
-        option_changed: function() {
+        escKey: function() {
+            if(this.options.confirmBox.useKeys) {
+                $(document).on('keypress', function(e) {
+                    if (e.keyCode == 27) {
+                        var $overlay = $("#confirmOverlay");
+                        if($overlay.length) {
+                            $overlay.remove();
+                        }
+                        
+                    }
+                });
+            }
+        },
 
+        /**
+         *    It shows the translation for picked language from select.
+         */
+        optionChanged: function() {
+
+            var self = this;
             $selectForm = $(this.element).next().find('.select-language');
 
             $selectForm.on('change', function() {
-
                     $current_div = $(this).parent().parent().parent();
                     $current_div.find('.chosen-language').removeClass('open');
                     $current_div.children('.open-translate').toggleClass('open');
@@ -328,8 +473,36 @@
                         $input = $current_div.find('.language-tabs span[id=' + $selected + ']').children('input');
                         $current_div.find('.current-language .translated').css('display', 'inline-block').html($input.val()).val($input.val());
                 }
+            self.toggleTranslationInput();
             });
+
             
+        },
+        /**
+         *    It marks (add class translated) option element in select if it's translated.
+         */
+        markTranslatedOptions: function() {
+            var $thisElementParent = $(this.element).parent();
+            $thisElementParent.find("select option").removeClass("translated");
+
+            $thisElementParent.find(".language-tabs").children("span").not(".removed").each(function(k,v){
+                $thisElementParent.find("select option[value='" + $(v).attr("id") + "']").addClass("translated");
+            });
+
+        },
+        /**
+         *    It hide/show textarea to pass translation.
+         *    Depends on select. If a lang is seleted - show it.
+         */
+        toggleTranslationInput: function() {
+            var $thisElementParent = $(this.element).parent();
+            
+            if($thisElementParent.find(".select-language").val() === "select") {
+                $thisElementParent.find(".m-wrap.new-word").addClass("hidden").siblings(".apply").addClass("hidden");
+            }
+            else {
+                $thisElementParent.find(".m-wrap.new-word").removeClass("hidden").siblings(".apply").removeClass("hidden");
+            }
         }
 
     };

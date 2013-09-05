@@ -99,8 +99,31 @@
     <script src="js/form-widget.js" type="text/javascript" ></script>
 
     <script>
-        $('.lang-translation').formWidget();
-    </script>   
+
+        $('.lang-translation').translationFields({
+                inputNamePrefix: "widget-",                 // change name prefix text
+                confirmBox: {
+                    yesText: "Tak, skasuj",                 // change text for delete translation
+                    noText: "Nie, anuluj!",                 // change text for cancel delete translation
+                    infoMessage: 'Jesteś pewny?',           // change info message for delete translation
+                    hText: 'Confirm your request',          // change heading for delete translation
+                    outerClick: true                       // switch true or false                    
+                },
+                // add languages
+                languages: {
+                    "select": "Select language",
+                    "PL": "Polish",
+                    "EN": "English",
+                    "FR": "French",
+                    "ES": "Spanish",
+                    "DE": "German",
+                    "JP": "Japanse",
+                    "PT": "Portuguese",
+                    "RT": "Russian"
+                }
+            }
+        );
+    </script>
 
 </body>
 </html>
