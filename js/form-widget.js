@@ -390,7 +390,7 @@
                         if(itemToDelete.hasClass("removed")) return;
                         e.preventDefault();
 
-                        itemToDelete.addClass("removed").fadeOut(700, function() {
+                        itemToDelete.addClass("removed").fadeOut(400, function() {
                             itemToDelete.remove();
                         });
                         self.markTranslatedOptions();
