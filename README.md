@@ -18,7 +18,6 @@ Translation Widget is a jQuery widget which you can use to enable sending text s
 6. [More examples](#More)
 8. [File input (beta)](#File)
 9. [License](#License)
-10. [Contact](#Contact)
 
 
 -------------
