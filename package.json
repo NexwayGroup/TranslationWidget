@@ -1,6 +1,6 @@
 {
   "name": "translationWidget",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -26,7 +26,8 @@
     "jshint-stylish": "^0.2.0",
     "load-grunt-tasks": "^0.4.0",
     "time-grunt": "^0.3.1",
-    "grunt-casperjs": "latest"
+    "grunt-casperjs": "latest",
+    "grunt-text-replace": "~0.3.12"
   },
   "engines": {
     "node": ">=0.10.0"

@@ -281,6 +281,11 @@ module.exports = function (grunt) {
           cwd: '.tmp/images',
           dest: '<%= yeoman.dist %>/images',
           src: ['generated/*']
+        }, {
+          expand: true,
+          cwd: '.tmp/scripts',
+          dest: '<%= yeoman.dist %>/scripts',
+          src: ['translationWidget.js']
         }]
       },
       styles: {
@@ -314,7 +319,7 @@ module.exports = function (grunt) {
     percolator: {
       compile: {
         source: '<%= yeoman.app %>/coffee/',
-        output: '.tmp/scripts/jq.translationWidget.js',
+        output: '.tmp/scripts/translationWidget.js',
         main: 'translationWidget.coffee',
         compile: true,
         //opts: '--bare'
@@ -331,6 +336,31 @@ module.exports = function (grunt) {
         }
       }
     },
+
+    replace: {
+      min: {
+        src: ['<%= yeoman.dist %>/scripts/translationWidget.min.js'],
+        dest: '<%= yeoman.dist %>/scripts/bare/translationWidget-bare.min.js',
+        replacements: [{
+          from: /\(function\(\){/,
+          to: 'jQuery(function($){'
+        }, {
+          from: '.call(this);',
+          to: ';'
+        }]
+      },
+      full: {
+        src: ['<%= yeoman.dist %>/scripts/translationWidget.js'],
+        dest: '<%= yeoman.dist %>/scripts/bare/translationWidget-bare.js',
+        replacements: [{
+          from: /\(function\(\) {/,
+          to: 'jQuery(function($) {'
+        }, {
+          from: '}).call(this);',
+          to: '});'
+        }]
+      },
+    }
 
   });
 
@@ -379,7 +409,8 @@ module.exports = function (grunt) {
     'uglify',
     //'filerev',
     'usemin',
-    'htmlmin'
+    'htmlmin',
+    'replace'
   ]);
 
   grunt.registerTask('default', [
