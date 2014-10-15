@@ -32,7 +32,10 @@ Installation<a name="Installation"></a>
 -------------
 
 **Download with bower**<br >
-You can use bower to get latest version of Translation Widget. Just type: ```bower install translation-widget``` in system terminal/console.
+You can use bower to get latest version of Translation Widget. Just type in system terminal/console:
+```bash
+bower install translation-widget --save
+```
 
 To enable this widget on your website you have to include javascript documents in your document head section:
  ```html
@@ -74,17 +77,12 @@ Label content is also instance name. However, if the label contains spaces, they
 
 
 Below are some simple examples of initialization only needed to run plugins. For both methods of initialization by the class and id. Place it somewhere in your document (for example at the bottom, just before ```</body>``` tag).
-```html
-
-<script>
-
+```javascript
 // WIDGET INITIALIZATION BY CLASS
 $('.lang-translation').translationWidget();
 
 // WIDGET INITIALIZATION BY ID
 $('#input1').translationWidget();
-
-</script>
 
 ```
 
@@ -96,16 +94,13 @@ Options<a name="Options"></a>
 ------------
 
 You can change widget settings by passing them as an JavaScript Object during initialization.
-```html
-<script>
+```javascript
 // WIDGET INITIALIZATION BY CLASS
 $('.lang-translation').translationWidget({
  // options list
 }, {
  // custom languages list
 });
-</script>
-
 ```
 
 ###Available languages<a name="Available"></a>
@@ -113,8 +108,7 @@ $('.lang-translation').translationWidget({
 By default Translation Widget has list of 5 available languages: Polish, English, French, Spanish, German. You can append new language to the list or override with your own custom list.
 
 To include new languages simply pass them during initialization as a JavaScript object just after the list of options:
-```html
-<script>
+```javascript
 // WIDGET INITIALIZATION BY CLASS
 $('.lang-translation').translationWidget({
  // list of options
@@ -122,19 +116,16 @@ $('.lang-translation').translationWidget({
  // list of additional languages
  'RU': 'Russian'
 });
-</script>
 ```
 
 The code above will add new russian language to the list. If you want to use only your list, set 'useDefaultLanguages' option to **false**:
-```html
-<script>
+```javascript
 // WIDGET INITIALIZATION BY CLASS
 $('.lang-translation').translationWidget({
  useDefaultLanguages: false,
 }, {
  'RU': 'Russian'
 });
-</script>
 ```
 
 ### Existing translations<a name="Existing"></a>
