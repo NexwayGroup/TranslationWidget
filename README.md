@@ -1,6 +1,7 @@
 Translation Widget v.1.0.8
 =================
 [![Build Status](https://travis-ci.org/mkatanski/TranslationWidget.svg?branch=master)](https://travis-ci.org/mkatanski/TranslationWidget)
+[![Latest Stable Version](https://poser.pugx.org/leaphly/cart-bundle/version.svg)](https://packagist.org/packages/leaphly/cart-bundle)
 
 Translation Widget is a jQuery widget which you can use to enable sending text strings and/or files in different languages.
 
