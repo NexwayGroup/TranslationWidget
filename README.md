@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mkatanski/TranslationWidget.svg?branch=master)](https://travis-ci.org/mkatanski/TranslationWidget)
+
 Translation Widget v.1.0.8
 =================
 
