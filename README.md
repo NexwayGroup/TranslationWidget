@@ -31,6 +31,9 @@ Translation Widget requires [jquery](http://jquery.com/) library to work.
 Installation<a name="Installation"></a>
 -------------
 
+**Download with bower**<br >
+You can use bower to get latest version of Translation Widget. Just type: ```bower install translation-widget``` in system terminal/console.
+
 To enable this widget on your website you have to include javascript documents in your document head section:
  ```html
  <!-- jQuery  -->
