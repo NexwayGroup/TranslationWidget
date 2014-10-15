@@ -1,5 +1,5 @@
 {
-  "name": "translationWidget",
+  "name": "translation-widget",
   "version": "1.0.6",
   "dependencies": {
     "es5-shim": "~3.1.0"
