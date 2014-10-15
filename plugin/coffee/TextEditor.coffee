@@ -46,7 +46,6 @@ class TextEditor extends EditorBase
   save: ->
     @_currentElement.removeData 'current'
     super()
-    return
 
   # Cancel changes in editor
   #

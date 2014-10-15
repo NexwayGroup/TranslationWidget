@@ -36,9 +36,6 @@
         if (this.options.messageScope === 'warning' && type === 'info') {
           show = false;
         }
-        if (type === 'debug') {
-          show = true;
-        }
         if (type === 'info') {
           titleColor = 'background: white; color: grey';
           msgColor = 'background: white; color: green';
@@ -63,11 +60,7 @@
       if (numeric == null) {
         numeric = -1;
       }
-      if (numeric > -1) {
-        return $.data(domElement, instName);
-      } else {
-        return $.data(domElement, instName);
-      }
+      return $.data(domElement, instName);
     };
 
     Plugin.prototype.runForEachInstance = function(selector, callback) {
@@ -168,7 +161,7 @@
 
     TextEditor.prototype.save = function() {
       this._currentElement.removeData('current');
-      TextEditor.__super__.save.call(this);
+      return TextEditor.__super__.save.call(this);
     };
 
     TextEditor.prototype.discard = function() {
