@@ -1,12 +1,12 @@
 {
   "name": "translation-widget",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "dependencies": {
-    "es5-shim": "~3.1.0"
+    "jquery": "1.11.1"
   },
   "devDependencies": {
     "normalize-css": "~3.0.2",
-    "jquery": "1.11.1"
+    "es5-shim": "~3.1.0"
   },
   "appPath": "plugin"
 }

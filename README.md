@@ -1,4 +1,4 @@
-Translation Widget v.1.0.7
+Translation Widget v.1.0.8
 =================
 
 Translation Widget is a jQuery widget which you can use to enable sending text strings and/or files in different languages.
@@ -36,7 +36,7 @@ To enable this widget on your website you have to include javascript documents i
  <!-- jQuery  -->
  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
  <!-- Widget core scripts  -->
- <script src="scripts/jq.translationWidget.min.js"></script>
+ <script src="scripts/translationWidget.min.js"></script>
  ```
 
 Also there is need to include css styles sheets:
