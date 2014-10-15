@@ -18,7 +18,6 @@ Translation Widget is a jQuery widget which you can use to enable sending text s
 6. [More examples](#More)
 8. [File input (beta)](#File)
 9. [License](#License)
-10. [Contact](#Contact)
 
 
 -------------
@@ -268,12 +267,3 @@ License<a name="License"></a>
 --------------
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Translation Widget</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a> and also available under [the MIT License](LICENSE.txt).
-
-Contact/Help<a name="Contact"></a>
--------------
-
-+ <mkatanski@nexway.com>
-+ <dduda@nexway.com>
-+ <mmaron@nexway.com>
-+ <ariana.las@gmail.com>
-+ <kgorecki@nexway.com>
