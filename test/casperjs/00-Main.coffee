@@ -143,8 +143,8 @@ commonTests = (test, _this) ->
     fakeLanguages = ["FR"]
     _checkTranslationsExistence test, existingLanguages, fakeLanguages, "#cg1"
 
-    # wait 500ms for close and open editor windows
-    _this.wait 500, ->
+    # wait for close and open editor windows
+    casper.waitWhileVisible "#cg1 .translation-options", ->
       test.assertNotVisible "#cg1 .translation-options", "'#cg1.translation-options' not visible after #cg2 click"
       test.assertVisible "#cg2 .translation-options", "'#cg2.translation-options' visible after #cg2 click"
       test.assertNotVisible "#cg3 .translation-options", "'#cg3.translation-options' not visible after #cg2 click"
@@ -156,7 +156,7 @@ commonTests = (test, _this) ->
     _this.echo "#body clicked", "COMMENT"
 
     # wait 500ms for close all opened editor windows.
-    _this.wait 500, ->
+    casper.waitWhileVisible ".translation-options", ->
       _checkDefaultState test, _this
       test.assertElementCount ".control-group .input-prepend .translation-options select", 0, "'select' is found 0 times"
       _testTabs test, _this, ENTrans, PLTrans
@@ -179,7 +179,7 @@ commonTests = (test, _this) ->
   _this.echo "#cg1 .add-on clicked", "COMMENT"
   _this.click "#cg1 .add-on"
   casper.waitFor(->
-    _this.wait 200, ->
+    casper.waitUntilVisible "#cg1 .translation-options", ->
       test.assertVisible "#cg1 .translation-options", "'#cg1.translation-options' visible after #cg1 click"
       test.assertNotVisible "#cg2 .translation-options", "'#cg2.translation-options' not visible after #cg1 click"
       test.assertNotVisible "#cg3 .translation-options", "'#cg3.translation-options' not visible after #cg1 click"
@@ -204,7 +204,7 @@ _testTabs = (test, _this, ENTrans, PLTrans) ->
       $("#cg1 #EN.chosen-language").click()
       return
 
-    _this.wait 400, ->
+    casper.waitUntilVisible "#cg1 .translation-options", ->
       existingLanguages =
         EN: ENTrans
         PL: PLTrans
@@ -217,7 +217,7 @@ _testTabs = (test, _this, ENTrans, PLTrans) ->
       $("#cg1 #EN.chosen-language").click()
       return
 
-    _this.wait 400, ->
+    casper.waitWhileVisible "#cg1 .translation-options", ->
       _checkDefaultState test, _this
 
       # Try to delete lang without accepting
@@ -257,13 +257,12 @@ _testTabs = (test, _this, ENTrans, PLTrans) ->
     $("#cg1 #PL.chosen-language").click()
     return
 
-  _this.wait(500, ->
+  casper.waitUntilVisible "#cg1 .translation-options", ->
     existingLanguages =
       EN: ENTrans
       PL: PLTrans
     _checkEditorWindow "#cg1", test, _this, existingLanguages, "update", "PL"
     clickSecondTab()
-  )
   return
 
 

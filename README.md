@@ -1,4 +1,4 @@
-Translation Widget v.1.0.8
+Translation Widget v.1.0.9
 =================
 [![Build Status](https://travis-ci.org/NexwayGroup/TranslationWidget.svg?branch=master)](https://travis-ci.org/NexwayGroup/TranslationWidget)
 
