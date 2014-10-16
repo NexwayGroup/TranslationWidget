@@ -340,7 +340,7 @@ module.exports = function (grunt) {
     replace: {
       min: {
         src: ['<%= yeoman.dist %>/scripts/translationWidget.min.js'],
-        dest: '<%= yeoman.dist %>/scripts/bare/translationWidget-bare.min.js',
+        dest: '<%= yeoman.dist %>/scripts/legacy/translationWidget-legacy.min.js',
         replacements: [{
           from: /\(function\(\){/,
           to: 'jQuery(function($){'
@@ -351,7 +351,7 @@ module.exports = function (grunt) {
       },
       full: {
         src: ['<%= yeoman.dist %>/scripts/translationWidget.js'],
-        dest: '<%= yeoman.dist %>/scripts/bare/translationWidget-bare.js',
+        dest: '<%= yeoman.dist %>/scripts/legacy/translationWidget-legacy.js',
         replacements: [{
           from: /\(function\(\) {/,
           to: 'jQuery(function($) {'
