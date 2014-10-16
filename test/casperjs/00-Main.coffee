@@ -225,23 +225,30 @@ _testTabs = (test, _this, ENTrans, PLTrans) ->
         $("#cg1 #EN.chosen-language .remove").click()
         return
       _checkConfirmWindow(test, _this, 'NO')
-      # Language should be still available
-      existingLanguages =
-        EN: ENTrans
-        PL: PLTrans
-      fakeLanguages = null
-      _checkTranslationsExistence test, existingLanguages, fakeLanguages, "#cg1"
 
-      # Now try to accept deleting language
-      casper.evaluate ->
-        $("#cg1 #EN.chosen-language .remove").click()
-        return
-      _checkConfirmWindow(test, _this, 'OK')
-      # Language should be still available
-      existingLanguages =
-        PL: PLTrans
-      fakeLanguages = ["EN"]
-      _checkTranslationsExistence test, existingLanguages, fakeLanguages, "#cg1"
+      casper.waitWhileVisible "#cg1 #EN.chosen-language .remove", ->
+        # Language should be still available
+        existingLanguages =
+          EN: ENTrans
+          PL: PLTrans
+        fakeLanguages = null
+        _checkTranslationsExistence test, existingLanguages, fakeLanguages, "#cg1"
+
+      , ->
+        # Now try to accept deleting language
+        casper.evaluate ->
+          $("#cg1 #EN.chosen-language .remove").click()
+          return
+        _checkConfirmWindow(test, _this, 'OK')
+
+        casper.waitWhileVisible "#cg1 #EN.chosen-language .remove", ->
+          # Language should be still available
+          existingLanguages =
+            PL: PLTrans
+          fakeLanguages = ["EN"]
+          _checkTranslationsExistence test, existingLanguages, fakeLanguages, "#cg1"
+        , ->
+          return
 
       true
 

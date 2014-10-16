@@ -1,6 +1,6 @@
 {
   "name": "translationWidget",
-  "version": "1.0.8",
+  "version": "1.0.8.1",
   "dependencies": {},
   "devDependencies": {
     "grunt": "^0.4.5",
