@@ -2,7 +2,7 @@ Translation Widget v.1.0.10
 =================
 [![Build Status](https://travis-ci.org/NexwayGroup/TranslationWidget.svg?branch=master)](https://travis-ci.org/NexwayGroup/TranslationWidget)
 
-**(See working DEMO)[http://nexwaygroup.github.io/TranslationWidget/]**
+**[See working DEMO](http://nexwaygroup.github.io/TranslationWidget/)**
 
 Translation Widget is a jQuery widget which you can use to enable sending text strings and/or files in different languages.
 
