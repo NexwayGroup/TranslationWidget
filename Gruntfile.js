@@ -20,7 +20,7 @@ module.exports = function (grunt) {
     app: require('./bower.json').appPath || 'plugin',
     dist: 'dist',
     demo: 'dist/demo',
-    name: 'translationWidget'
+    name: 'TranslationWidget'
   };
 
   // Define the configuration for all the tasks
