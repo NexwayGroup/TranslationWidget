@@ -4,7 +4,9 @@ Translation Widget v.1.0.10
 
 **[See working DEMO](http://nexwaygroup.github.io/TranslationWidget/)**
 
-Translation Widget is a jQuery widget which you can use to enable sending text strings and/or files in different languages.
+The Translation Widget has been built as an answer to the common text localization UI/UX problems.
+
+This jQuery Widget allows you to manage translations (create/edit/delete) of a string or several images per language in a small space.
 
 ## Table of Contents
 1. [Requirements](#Requirements)
@@ -29,38 +31,37 @@ Translation Widget is a jQuery widget which you can use to enable sending text s
 Requirements<a name="Requirements"></a>
 -------------
 
-Translation Widget requires [jquery](http://jquery.com/) library to work.
+Translation Widget requires [jQuery](http://jquery.com/) library to work.
 
 Installation<a name="Installation"></a>
 -------------
 
 **Download with bower**<br >
-You can use bower to get latest version of Translation Widget. Just type in system terminal/console:
 ```bash
 bower install translation-widget --save
 ```
 
-To enable this widget on your website you have to include javascript documents in your document head section:
+Include the scripts:
  ```html
  <!-- jQuery  -->
  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
- <!-- Widget core scripts  -->
+ <!-- Widget core script  -->
  <script src="scripts/translationWidget.min.js"></script>
  ```
 
-Also there is need to include css styles sheets:
+You will need some basic styles:
 ```html
 <link rel="stylesheet" href="styles/translationWidget.css">
 ```
 
-*jq.translationWidget.min.js* and *translationWidget.css* files you can find in **/dist/scripts** and **/dist/styles** folders.
+You can find these files in the dist folder.
 
 --------------
 
 Initialization<a name="Initialization"></a>
 -----------
 
-First you have to create basic html skeleton for each instance like this:
+First you have to create a basic html skeleton for each control:
 ```html
 <div class="control-group">
  <label class="control-label">Translation</label>
@@ -70,7 +71,7 @@ First you have to create basic html skeleton for each instance like this:
 </div>
 ```
 
-It should be noted that the id attribute is optional and depends on how you want to initialize the plug-ins. There are two methods of doing this: by class or by id. The main difference between these two methods is that when plug-ins are initiated by the class name, all the options are the same for each instance on the page. Initialization by id gives each instance more independent behaviour.
+It should be noted that the id attribute is optional and depends on how you want to initialize the plug-in. There are two methods of doing this: by class or by id. The main difference between these two methods is that when plug-ins are initiated by the class name, all the options are the same for each instance on the page. Initialization by id gives each instance more independent behaviour.
 
 > *Tip: You can create different classes for different groups of inputs. This way you can have two independent groups of widgets on your page with different settings and translations.*
 
@@ -79,24 +80,23 @@ Label content is also instance name. However, if the label contains spaces, they
 **Instance name = Translation_Widget**
 
 
-Below are some simple examples of initialization only needed to run plugins. For both methods of initialization by the class and id. Place it somewhere in your document (for example at the bottom, just before ```</body>``` tag).
+Below are some basic examples of initialization to run the plugin, using class or id.
 ```javascript
 // WIDGET INITIALIZATION BY CLASS
 $('.lang-translation').translationWidget();
 
 // WIDGET INITIALIZATION BY ID
 $('#input1').translationWidget();
-
 ```
 
-> Note that if you want to intialize widget by input ID, you have to do it separately for each input.
+> Note that if you want to initialize the widget by input ID, you will have to do it separately for each input.
 
 ------------
 
 Options<a name="Options"></a>
 ------------
 
-You can change widget settings by passing them as an JavaScript Object during initialization.
+You can change the widget settings by passing an object.
 ```javascript
 // WIDGET INITIALIZATION BY CLASS
 $('.lang-translation').translationWidget({
@@ -106,11 +106,11 @@ $('.lang-translation').translationWidget({
 });
 ```
 
-###Available languages<a name="Available"></a>
+### Available languages<a name="Available"></a>
 
 By default Translation Widget has list of 5 available languages: Polish, English, French, Spanish, German. You can append new language to the list or override with your own custom list.
 
-To include new languages simply pass them during initialization as a JavaScript object just after the list of options:
+To include new languages simply pass them during initialization as an object just after the options:
 ```javascript
 // WIDGET INITIALIZATION BY CLASS
 $('.lang-translation').translationWidget({
@@ -135,7 +135,7 @@ $('.lang-translation').translationWidget({
 
 #### Use JavaScript object<a name="JavaScript"></a>
 
-There are at least two ways to load existing translations. The simplest one is to create object which stores translations for each plugin on page. You then assign this object to the parameter **dataSource**.
+There are at least two ways to load the existing translations. The simplest one is to create an object which stores the translations for each plugin in the page. You can then assign this object to the parameter **dataSource**.
 
 The object has its own schema which looks like this:
 
@@ -149,20 +149,20 @@ The object has its own schema which looks like this:
 
 where *instanceName* is the name of widget instance* on page, *langCode* is the code name of language. This standard allows us to pass the translations for all widgets independently even if widgets are initialized only once by the class name.
 
-* more info about instance name is in [Initialization](#Initialization) section of this document
+* more info about the instance name is in [Initialization](#Initialization) section of this document
 
 Example:
 ```javascript
 var translationsObject = new Object();
 
 // Translations for first instance
-translationsObject["Instance1"] = {
+translationsObject['Instance1'] = {
    EN: 'English translation',
    PL: 'Polskie tłumaczenie',
 };
 
 // Translations for second instance
-translationsObject["Instance2"] = {
+translationsObject['Instance2'] = {
    EN: 'Another translation',
    PL: 'Inne tłumaczenie',
 };
@@ -171,14 +171,13 @@ translationsObject["Instance2"] = {
 $('.lang-translation').translationWidget({
  dataSource: translationsObject, // pass translationObject to load translations
 });
-
 ```
 
 #### Use custom function<a name="custom"></a>
 
-In some cases, you may want to filter the translation before passing them to an instance of the plugin. Or maybe you want to take advantage of the AJAX to retrieve the translation from the server. All you need to do is assign a custom function to **dataSource** parameter. The function, however, must return the same object with translations as described above. 
+In some cases, you may want to filter the translation before passing them to an instance of the plugin. Or maybe you want to take advantage of the AJAX to retrieve the translation from the server. All you need to do is assign a custom function to the **dataSource** parameter. The function, however, must return the same object with translations as described above. 
 
-Here is example which result is exactly the same as above but it uses custom function instaed of assigning javascript object to plugins *dataSource*:
+Here is an example whose result is exactly the same as above but it uses a custom function instead of an object to *dataSource*:
 
 ```javascript
 $('.lang-translation').translationWidget({
@@ -186,10 +185,9 @@ $('.lang-translation').translationWidget({
         return translationsObject;
    }
 });
-
 ```
 
-> Note that the function takes one parameter called "instanceName". It contains the name of the instance for which there is data loading. This can be useful if you want to have more control over assigning translations to a specific instance of the plugin at the same time using the initialization by the class name.
+> Note that the function takes one parameter called "instanceName". It contains the name of the instance for which there is data loading. This can be useful if you want to have more control over attaching translations to a specific instance of the plugin at the same time using the initialization by class name.
 
 
 ### Other options<a name="Other"></a>
@@ -230,15 +228,14 @@ defaultOptions = {
 API <a name="API"></a>
 --------------
 
-Plugin is object oriented and has a number of public methods that can be used for advanced control and expand its capabilities.
+This plugin has a number of public methods that can be used for advanced control and expand its capabilities.
 
-To get access to the main class of the plugin you must assign an instance variable:
+To get access to the public methods scope, store the result in a variable:
 ```javascript
 var instance = $('#input1').data('translationWidget_#input1');
 ```
-where '#input1' is an ID of html input element.
 
-Now you can invoke built in methods. For example to clear all translations of **input1** write something like this:
+Now you can invoke built-in methods. For example to clear all translations of **input1** write something like this:
 ```javascript
 instance.clearData();
 ```
@@ -250,14 +247,16 @@ More examples <a name="More"></a>
 
 More working examples can be found in **/plugin** folder. see *index.html* source to check some possibilities.
 
-If you have node.js installed on your machine, run: ```grunt serve``` in terminal or console to test plugin behaviour.
+If you have node.js installed on your machine, run: ```grunt serve``` in terminal or console to test the plugin behaviour.
 
 
 
 File input (beta) <a name="File"></a>
 --------------
 
-Instead of using html's text input you can use file input to translate files and sending them to the server. However, file handling is in beta so may not working correctly. Also some of widget functionality may or may not be compatible with this type of input.
+You can use file inputs to translate files and sending them to the server.
+
+**We haven't tested yet much this feature, expect some glitches! DO not hesitate to file issues if you meet any unexpected behaviour.**
 
 
 License<a name="License"></a>
