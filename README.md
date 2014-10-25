@@ -8,6 +8,8 @@ The Translation Widget has been built as an answer to the common text localizati
 
 This jQuery Widget allows you to manage translations (create/edit/delete) of a string or several images per language in a small space.
 
+![Translation Widget](http://nexwaygroup.github.io/TranslationWidget/Translation_Widget.png)
+
 ## Table of Contents
 1. [Requirements](#Requirements)
 2. [Installation](#Installation)
